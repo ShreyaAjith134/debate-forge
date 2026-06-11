@@ -1,0 +1,15 @@
+AI can personalize learning for every student by adapting to their pace, style, and knowledge gaps in real time. Traditional classrooms force one teacher to manage 30+ students, making true personalization impossible.
+
+Studies show that intelligent tutoring systems can produce learning gains equivalent to one-on-one human tutoring. Carnegie Learning's AI math tutor improved student scores by 15% compared to traditional instruction.
+
+AI never gets tired, frustrated, or biased. It can provide consistent, patient feedback at 3am before an exam, something no human teacher can match.
+
+Teachers spend up to 40% of their time on administrative tasks — grading, attendance, reporting. AI can automate all of this, freeing teachers to focus on mentorship and human connection.
+
+AI cannot replace the emotional intelligence of a good teacher. Students need a trusted adult who notices when they are struggling emotionally, not just academically.
+
+Teaching is fundamentally a human relationship. Research on self-determination theory shows students need relatedness — a felt connection with a caring adult — to sustain intrinsic motivation.
+
+AI systems reflect the biases in their training data. Deploying them in education risks encoding and scaling existing inequalities in ways that are hard to detect or correct.
+
+Not all students have equal access to devices and internet. AI-driven education risks creating a two-tier system where quality learning is only available to the privileged.

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DebateForge</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0a0a0f;
+      color: #e2e2e2;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(244, 114, 182, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #0f0a14;
+    }
+
+    header h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #f472b6;
+      letter-spacing: -0.3px;
+    }
+
+    header span {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      margin-left: auto;
+    }
+
+    .setup {
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(244, 114, 182, 0.1);
+      background: #0c0a12;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .setup input {
+      flex: 1;
+      min-width: 200px;
+      background: #1a0f24;
+      border: 1px solid rgba(244, 114, 182, 0.2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: #f9a8d4;
+      outline: none;
+    }
+
+    .setup input::placeholder { color: rgba(244,114,182,0.3); }
+
+    .stance-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    .stance-btn {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(244,114,182,0.25);
+      background: transparent;
+      color: rgba(244,114,182,0.5);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .stance-btn.active {
+      background: rgba(244,114,182,0.15);
+      border-color: #f472b6;
+      color: #f9a8d4;
+    }
+
+    .main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .chat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .msg {
+      display: flex;
+      gap: 10px;
+      max-width: 80%;
+    }
+
+    .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+    .msg.ai { align-self: flex-start; }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .avatar.ai { background: #2d0a1a; color: #f9a8d4; }
+    .avatar.user { background: #1a1030; color: #a78bfa; font-size: 12px; font-weight: 600; }
+
+    .bubble {
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .bubble.ai {
+      background: #160d20;
+      border: 1px solid rgba(244,114,182,0.15);
+      color: rgba(255,255,255,0.85);
+    }
+
+    .bubble.user {
+      background: #1a1030;
+      border: 1px solid rgba(167,139,250,0.2);
+      color: rgba(255,255,255,0.85);
+    }
+
+    .typing {
+      display: flex;
+      gap: 4px;
+      padding: 4px 0;
+    }
+
+    .typing span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #f472b6;
+      animation: bounce 1s infinite;
+    }
+
+    .typing span:nth-child(2) { animation-delay: 0.15s; }
+    .typing span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes bounce {
+      0%, 100% { opacity: 0.3; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-4px); }
+    }
+
+    .input-bar {
+      padding: 16px 24px;
+      border-top: 1px solid rgba(244,114,182,0.1);
+      display: flex;
+      gap: 10px;
+    }
+
+    .input-bar input {
+      flex: 1;
+      background: #160d20;
+      border: 1px solid rgba(244,114,182,0.2);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.85);
+      outline: none;
+    }
+
+    .input-bar input::placeholder { color: rgba(255,255,255,0.2); }
+
+    .send-btn {
+      background: #d4537e;
+      border: none;
+      border-radius: 8px;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      color: white;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+
+    .send-btn:hover { background: #e06090; }
+    .send-btn:disabled { background: #4a2a3a; cursor: not-allowed; }
+
+    .sources-panel {
+      width: 260px;
+      background: #0c0a12;
+      border-left: 1px solid rgba(244,114,182,0.1);
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sources-panel h3 {
+      font-size: 11px;
+      color: #f472b6;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+
+    .source-card {
+      background: #160d20;
+      border: 1px solid rgba(244,114,182,0.12);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .source-card .src-title {
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 4px;
+    }
+
+    .source-card .src-text {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.5;
+      margin-bottom(6px;
+    }
+
+    .sim-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .sim-label { font-size: 11px; color: #f472b6; }
+
+    .sim-bar {
+      flex: 1;
+      height: 3px;
+      background: rgba(244,114,182,0.1);
+      border-radius: 2px;
+    }
+
+    .sim-fill {
+      height: 3px;
+      background: #f472b6;
+      border-radius: 2px;
+    }
+
+    .empty-state {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+      color: rgba(255,255,255,0.15);
+      font-size: 14px;
+    }
+
+    .empty-state .icon { font-size: 32px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>⚔️ DebateForge</h1>
+  <span>RAG-powered debate partner</span>
+</header>
+
+<div class="setup">
+  <input id="topicInput" type="text" placeholder="Enter debate topic e.g. Should AI replace teachers?" value="Should AI replace teachers?" />
+  <div class="stance-group">
+    <button class="stance-btn active" onclick="setStance(this, 'pro')">Pro</button>
+    <button class="stance-btn" onclick="setStance(this, 'against')">Against</button>
+    <button class="stance-btn" onclick="setStance(this, 'neutral')">Neutral</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="chat">
+    <div class="messages" id="messages">
+      <div class="empty-state" id="emptyState">
+        <div class="icon">🧠</div>
+        <div>Make your opening argument</div>
+      </div>
+    </div>
+    <div class="input-bar">
+      <input id="msgInput" type="text" placeholder="Type your argument..." onkeydown="if(event.key==='Enter') sendMessage()" />
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+
+  <div class="sources-panel">
+    <h3>Retrieved Evidence</h3>
+    <div id="sourcesList">
+      <div style="font-size:12px;color:rgba(255,255,255,0.2)">Sources will appear here after your first argument.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let stance = 'pro';
+
+  function setStance(btn, val) {
+    document.querySelectorAll('.stance-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    stance = val;
+  }
+
+  function addMessage(text, role) {
+    const empty = document.getElementById('emptyState');
+    if (empty) empty.remove();
+
+    const messages = document.getElementById('messages');
+    const msg = document.createElement('div');
+    msg.className = `msg ${role}`;
+
+    const avatar = document.createElement('div');
+    avatar.className = `avatar ${role}`;
+    avatar.textContent = role === 'ai' ? '⚔' : 'U';
+
+    const bubble = document.createElement('div');
+    bubble.className = `bubble ${role}`;
+    bubble.textContent = text;
+
+    msg.appendChild(avatar);
+    msg.appendChild(bubble);
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
+    return msg;
+  }
+
+  function showTyping() {
+    const empty = document.getElementById('emptyState');
+    if (empty) empty.remove();
+
+    const messages = document.getElementById('messages');
+    const msg = document.createElement('div');
+    msg.className = 'msg ai';
+    msg.id = 'typingIndicator';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar ai';
+    avatar.textContent = '⚔';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble ai';
+    bubble.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+
+    msg.appendChild(avatar);
+    msg.appendChild(bubble);
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('typingIndicator');
+    if (t) t.remove();
+  }
+
+  function updateSources(sources) {
+    const list = document.getElementById('sourcesList');
+    list.innerHTML = '';
+    sources.forEach(s => {
+      const score = Math.max(0, s.score);
+      const pct = Math.round(score * 100);
+      const card = document.createElement('div');
+      card.className = 'source-card';
+      card.innerHTML = `
+        <div class="src-title">${s.source}</div>
+        <div class="src-text" style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.5;margin-bottom:6px">${s.text.slice(0, 100)}...</div>
+        <div class="sim-bar-wrap">
+          <span class="sim-label">${pct}%</span>
+          <div class="sim-bar"><div class="sim-fill" style="width:${pct}%"></div></div>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  async function sendMessage() {
+    const topic = document.getElementById('topicInput').value.trim();
+    const msg = document.getElementById('msgInput').value.trim();
+    if (!msg || !topic) return;
+
+    document.getElementById('msgInput').value = '';
+    document.getElementById('sendBtn').disabled = true;
+
+    addMessage(msg, 'user');
+    showTyping();
+
+    try {
+      const res = await fetch('/debate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic, message: msg })
+      });
+      const data = await res.json();
+      removeTyping();
+      addMessage(data.response, 'ai');
+      updateSources(data.sources);
+    } catch (err) {
+      removeTyping();
+      addMessage('Something went wrong. Try again.', 'ai');
+    }
+
+    document.getElementById('sendBtn').disabled = false;
+    document.getElementById('msgInput').focus();
+  }
+</script>
+
+</body>
+</html>
