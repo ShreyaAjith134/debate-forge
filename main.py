@@ -74,9 +74,34 @@ Respond ONLY with a JSON object, no markdown, no explanation outside the JSON:
         return {"fallacy": None, "explanation": None}
 
 def get_scores(message):
-    prompt = f"""Score this debate argument on four metrics, each out of 10.
+    prompt = f"""You are a strict debate judge. Score this argument on four criteria, each out of 10.
 
 Argument: "{message}"
+
+Scoring rules:
+LOGIC (1-10):
+- 1-3: Conclusion does not follow from premise, circular reasoning, or non-sequitur
+- 4-6: Some logical structure but contains unsupported leaps or weak reasoning
+- 7-9: Clear logical flow, premise supports conclusion well
+- 10: Airtight reasoning, no logical gaps
+
+EVIDENCE (1-10):
+- 1-3: Pure opinion or feeling, no facts, no examples, no data
+- 4-6: Some general examples but no specific studies, stats, or citations
+- 7-9: Specific facts, real examples, or named studies referenced
+- 10: Multiple concrete statistics or peer-reviewed evidence cited
+
+CLARITY (1-10):
+- 1-3: Unclear, rambling, or hard to follow
+- 4-6: Understandable but could be more precise
+- 7-9: Clear, concise, well-structured
+- 10: Perfectly articulated, no ambiguity
+
+PERSUASIVENESS (1-10):
+- 1-3: Would not convince anyone, emotionally weak, no rhetorical force
+- 4-6: Somewhat convincing but lacks impact
+- 7-9: Compelling, addresses the audience well
+- 10: Highly persuasive, strong rhetorical force
 
 Respond ONLY with a JSON object, no markdown:
 {{"logic": 0, "evidence": 0, "clarity": 0, "persuasiveness": 0}}"""
