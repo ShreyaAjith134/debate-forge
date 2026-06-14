@@ -6,14 +6,6 @@ An AI-powered debate partner that uses Retrieval Augmented Generation (RAG) to g
 
 DebateForge lets users practice and sharpen their debate skills against an AI opponent. The system retrieves semantically relevant evidence from a local corpus before generating responses, ensuring arguments are grounded in real content rather than hallucinated by the model.
 
-## Screenshots
-
-![Landing Screen](screenshots/landing.png)
-![Topic Selection](screenshots/topics.png)
-![Stance Selection](screenshots/stance.png)
-![Debate Mode](screenshots/debate.png)
-![Practice Mode](screenshots/practice.png)
-
 ## Features
 
 - **Debate Mode** — Go head to head with an AI opponent that argues the opposing side with no assistance given to the user.
@@ -115,6 +107,14 @@ python -m uvicorn main:app --reload
 ```
 
 Open `http://127.0.0.1:8000` in your browser.
+
+## Screenshots
+
+![Landing Screen](screenshots/landing.png)
+![Topic Selection](screenshots/topics.png)
+![Stance Selection](screenshots/stance.png)
+![Debate Mode](screenshots/debate.png)
+![Practice Mode](screenshots/practice.png)
 
 ## Key Concepts Demonstrated
 
