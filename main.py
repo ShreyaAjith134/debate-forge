@@ -5,9 +5,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+from typing import List
 from dotenv import load_dotenv
-from retriever import retrieve
 from groq import Groq
+from retriever import retrieve
 
 load_dotenv()
 
@@ -24,17 +25,33 @@ app.add_middleware(
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+
+class Message(BaseModel):
+    role: str
+    content: str
+
+
 class DebateRequest(BaseModel):
     topic: str
     message: str
     stance: str = "pro"
+    history: List[Message] = []
+    mode: str = "debate"
 
-def get_counterargument(topic, message, stance, context):
+
+def get_counterargument(topic, message, stance, context, history):
     stance_instruction = {
         "pro": "The user is arguing FOR the topic. You must argue AGAINST it.",
         "against": "The user is arguing AGAINST the topic. You must argue FOR it.",
         "neutral": "Challenge the user's argument from whichever angle exposes the weakest point."
     }.get(stance, "Challenge the user's argument.")
+
+    history_text = ""
+    if history:
+        history_text = "\n\nConversation so far:\n"
+        for msg in history[-6:]:
+            label = "User" if msg.role == "user" else "You"
+            history_text += f"{label}: {msg.content}\n"
 
     prompt = f"""You are a sharp, rigorous debate opponent. The debate topic is: "{topic}"
 
@@ -42,10 +59,13 @@ def get_counterargument(topic, message, stance, context):
 
 Retrieved evidence from knowledge base:
 {context}
+{history_text}
 
 The user just said: "{message}"
 
-Respond with ONE strong counterargument, grounded in the evidence above. 3-5 sentences, no bullet points, direct and assertive."""
+Respond with ONE strong counterargument, grounded in the evidence above.
+Reference previous points in the conversation if relevant.
+3-5 sentences, no bullet points, direct and assertive."""
 
     res = groq_client.chat.completions.create(
         model="llama-3.1-8b-instant",
@@ -54,12 +74,13 @@ Respond with ONE strong counterargument, grounded in the evidence above. 3-5 sen
     )
     return res.choices[0].message.content
 
+
 def get_fallacy(message):
     prompt = f"""Analyze this debate argument for logical fallacies.
 
 Argument: "{message}"
 
-Respond ONLY with a JSON object, no markdown, no explanation outside the JSON:
+Respond ONLY with a JSON object, no markdown:
 {{"fallacy": "name of fallacy or null if none", "explanation": "one sentence explanation or null"}}"""
 
     res = groq_client.chat.completions.create(
@@ -72,6 +93,7 @@ Respond ONLY with a JSON object, no markdown, no explanation outside the JSON:
         return json.loads(text)
     except:
         return {"fallacy": None, "explanation": None}
+
 
 def get_scores(message):
     prompt = f"""You are a strict debate judge. Score this argument on four criteria, each out of 10.
@@ -117,26 +139,60 @@ Respond ONLY with a JSON object, no markdown:
     except:
         return {"logic": 0, "evidence": 0, "clarity": 0, "persuasiveness": 0}
 
+
+def get_coaching(topic, message, counterargument, context):
+    prompt = f"""You are a debate coach reviewing a student's argument. Be honest and direct.
+
+Debate topic: "{topic}"
+Student's argument: "{message}"
+Opponent's counterargument: "{counterargument}"
+Retrieved evidence available: {context}
+
+Give coaching feedback in this exact JSON format, no markdown:
+{{
+  "did_well": ["point 1", "point 2"],
+  "weaknesses": ["point 1", "point 2"],
+  "sharper_version": "rewrite the student's argument in 2-3 sentences using better logic and the available evidence"
+}}"""
+
+    res = groq_client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=400
+    )
+    text = res.choices[0].message.content.strip()
+    try:
+        return json.loads(text)
+    except:
+        return {"did_well": [], "weaknesses": [], "sharper_version": ""}
+
+
 @app.get("/")
 def root():
     return FileResponse("index.html")
 
+
 @app.post("/debate")
 def debate(req: DebateRequest):
-    chunks = retrieve(req.message, n_results=3)
+    chunks = retrieve(req.topic, req.message, n_results=3)
 
     context = "\n\n".join([
         f"[Source: {c['source']}]\n{c['text']}"
         for c in chunks
     ])
 
-    counterargument = get_counterargument(req.topic, req.message, req.stance, context)
+    counterargument = get_counterargument(req.topic, req.message, req.stance, context, req.history)
     fallacy = get_fallacy(req.message)
     scores = get_scores(req.message)
+
+    coaching = None
+    if req.mode == "practice":
+        coaching = get_coaching(req.topic, req.message, counterargument, context)
 
     return {
         "response": counterargument,
         "sources": chunks,
         "fallacy": fallacy,
-        "scores": scores
+        "scores": scores,
+        "coaching": coaching
     }

@@ -12,66 +12,253 @@
       background: #0a0a0f;
       color: #e2e2e2;
       height: 100vh;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
     }
 
-    header {
-      padding: 16px 24px;
-      border-bottom: 1px solid rgba(244, 114, 182, 0.15);
-      display: flex;
+    .screen { display: none; flex-direction: column; height: 100vh; }
+    .screen.active { display: flex; }
+
+    /* ── SCREEN 1: LANDING ── */
+    #s1 {
       align-items: center;
-      gap: 10px;
-      background: #0f0a14;
+      justify-content: center;
+      gap: 48px;
+      background: radial-gradient(ellipse at 50% 40%, #1a0a2e 0%, #0a0a0f 70%);
     }
 
-    header h1 { font-size: 20px; font-weight: 600; color: #f472b6; }
-    header span { font-size: 12px; color: rgba(255,255,255,0.3); margin-left: auto; }
+    .logo-wrap { text-align: center; }
 
-    .setup {
-      padding: 16px 24px;
-      border-bottom: 1px solid rgba(244,114,182,0.1);
-      background: #0c0a12;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
+    .logo-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      display: block;
     }
 
-    .setup input {
-      flex: 1;
-      min-width: 200px;
-      background: #1a0f24;
-      border: 1px solid rgba(244,114,182,0.2);
-      border-radius: 8px;
-      padding: 10px 14px;
+    .logo-title {
+      font-size: 48px;
+      font-weight: 700;
+      color: #f472b6;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .logo-sub {
+      font-size: 15px;
+      color: rgba(255,255,255,0.3);
+      margin-top: 10px;
+      letter-spacing: 0.02em;
+    }
+
+    .mode-cards {
+      display: flex;
+      gap: 20px;
+    }
+
+    .mode-card {
+      width: 220px;
+      padding: 28px 24px;
+      border-radius: 16px;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .mode-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(244,114,182,0.4);
+      background: rgba(244,114,182,0.06);
+    }
+
+    .mode-card .mc-icon { font-size: 36px; margin-bottom: 12px; }
+    .mode-card .mc-title { font-size: 17px; font-weight: 600; color: #f9a8d4; margin-bottom: 8px; }
+    .mode-card .mc-desc { font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.5; }
+
+    /* ── SCREEN 2: TOPIC ── */
+    #s2 {
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      background: radial-gradient(ellipse at 50% 40%, #0f0a1e 0%, #0a0a0f 70%);
+    }
+
+    .screen-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #f472b6;
+      text-align: center;
+    }
+
+    .screen-sub {
       font-size: 14px;
-      color: #f9a8d4;
-      outline: none;
+      color: rgba(255,255,255,0.3);
+      margin-top: -20px;
+      text-align: center;
     }
 
-    .setup input::placeholder { color: rgba(244,114,182,0.3); }
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      max-width: 640px;
+      width: 100%;
+      padding: 0 24px;
+    }
 
-    .stance-group { display: flex; gap: 6px; }
+    .topic-card {
+      padding: 16px 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(244,114,182,0.15);
+      background: rgba(244,114,182,0.04);
+      cursor: pointer;
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      transition: all 0.15s;
+      line-height: 1.4;
+    }
 
-    .stance-btn {
-      padding: 8px 16px;
-      border-radius: 20px;
-      border: 1px solid rgba(244,114,182,0.25);
-      background: transparent;
-      color: rgba(244,114,182,0.5);
+    .topic-card:hover {
+      border-color: #f472b6;
+      background: rgba(244,114,182,0.1);
+      color: #f9a8d4;
+      transform: translateY(-2px);
+    }
+
+    .back-btn {
       font-size: 13px;
+      color: rgba(255,255,255,0.3);
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s;
+    }
+
+    .back-btn:hover { color: #f472b6; }
+
+    /* ── SCREEN 3: STANCE ── */
+    #s3 {
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      background: radial-gradient(ellipse at 50% 40%, #0f0a1e 0%, #0a0a0f 70%);
+    }
+
+    .selected-topic-badge {
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      background: rgba(244,114,182,0.08);
+      border: 1px solid rgba(244,114,182,0.15);
+      border-radius: 20px;
+      padding: 6px 16px;
+    }
+
+    .stance-cards {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 700px;
+    }
+
+    .stance-card {
+      width: 190px;
+      padding: 24px 20px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .stance-card:hover { transform: translateY(-3px); }
+
+    .stance-card.pro:hover {
+      border-color: #4ade80;
+      background: rgba(74,222,128,0.07);
+    }
+
+    .stance-card.against:hover {
+      border-color: #f87171;
+      background: rgba(248,113,113,0.07);
+    }
+
+    .stance-card.switch:hover {
+      border-color: #a78bfa;
+      background: rgba(167,139,250,0.07);
+    }
+
+    .stance-card .sc-icon { font-size: 32px; margin-bottom: 10px; }
+    .stance-card .sc-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .stance-card.pro .sc-title { color: #4ade80; }
+    .stance-card.against .sc-title { color: #f87171; }
+    .stance-card.switch .sc-title { color: #a78bfa; }
+    .stance-card .sc-desc { font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.4; }
+
+    /* ── SCREEN 4: DEBATE ── */
+    #s4 { background: #0a0a0f; }
+
+    .debate-header {
+      padding: 12px 24px;
+      border-bottom: 1px solid rgba(244,114,182,0.12);
+      background: #0f0a14;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .debate-header .dh-logo {
+      font-size: 15px;
+      font-weight: 600;
+      color: #f472b6;
+    }
+
+    .dh-topic {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      flex: 1;
+    }
+
+    .dh-topic span { color: #f9a8d4; }
+
+    .dh-badges { display: flex; gap: 6px; }
+
+    .dh-badge {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(244,114,182,0.2);
+      color: rgba(244,114,182,0.6);
+    }
+
+    .dh-badge.mode-badge {
+      border-color: rgba(167,139,250,0.2);
+      color: rgba(167,139,250,0.6);
+    }
+
+    .new-debate-btn {
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(244,114,182,0.2);
+      background: transparent;
+      color: rgba(244,114,182,0.6);
       cursor: pointer;
       transition: all 0.15s;
     }
 
-    .stance-btn.active {
-      background: rgba(244,114,182,0.15);
+    .new-debate-btn:hover {
       border-color: #f472b6;
       color: #f9a8d4;
     }
 
-    .main { display: flex; flex: 1; overflow: hidden; }
+    .debate-body { display: flex; flex: 1; overflow: hidden; }
 
     .chat { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
@@ -97,7 +284,7 @@
     .avatar.ai { background: #2d0a1a; color: #f9a8d4; }
     .avatar.user { background: #1a1030; color: #a78bfa; font-size: 12px; font-weight: 600; }
 
-    .bubble-wrap { display: flex; flex-direction: column; gap: 8px; }
+    .bubble-wrap { display: flex; flex-direction: column; gap: 8px; max-width: 100%; }
 
     .bubble {
       padding: 12px 16px;
@@ -131,15 +318,10 @@
       align-self: flex-start;
     }
 
-    .score-cards {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+    .score-cards { display: flex; gap: 8px; flex-wrap: wrap; }
 
     .score-card {
-      flex: 1;
-      min-width: 70px;
+      flex: 1; min-width: 70px;
       background: #160d20;
       border: 1px solid rgba(244,114,182,0.12);
       border-radius: 8px;
@@ -155,15 +337,64 @@
       margin-bottom: 4px;
     }
 
-    .score-card .sc-val {
-      font-size: 20px;
-      font-weight: 600;
-      color: #f472b6;
+    .score-card .sc-val { font-size: 20px; font-weight: 600; color: #f472b6; }
+
+    .coaching-card {
+      background: #0a140a;
+      border: 1px solid rgba(74,222,128,0.2);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.6;
     }
 
-    .typing {
-      display: flex; gap: 4px; padding: 4px 0;
+    .coach-title {
+      font-size: 11px;
+      color: #4ade80;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
     }
+
+    .coaching-section { margin-bottom: 10px; }
+
+    .coaching-section .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .coaching-section.well .section-label { color: #4ade80; }
+    .coaching-section.weak .section-label { color: #f87171; }
+    .coaching-section.sharper .section-label { color: #60a5fa; }
+
+    .coaching-section ul { padding-left: 16px; color: rgba(255,255,255,0.65); }
+    .coaching-section ul li { margin-bottom: 3px; }
+
+    .sharper-text {
+      color: rgba(255,255,255,0.75);
+      font-style: italic;
+      border-left: 2px solid #60a5fa;
+      padding-left: 10px;
+    }
+
+    .flip-alert {
+      align-self: center;
+      font-size: 12px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      background: rgba(167,139,250,0.1);
+      border: 1px solid rgba(167,139,250,0.3);
+      color: #a78bfa;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .typing { display: flex; gap: 4px; padding: 4px 0; }
 
     .typing span {
       width: 6px; height: 6px; border-radius: 50%;
@@ -214,7 +445,7 @@
     .send-btn:disabled { background: #4a2a3a; cursor: not-allowed; }
 
     .sources-panel {
-      width: 260px;
+      width: 240px;
       background: #0c0a12;
       border-left: 1px solid rgba(244,114,182,0.1);
       padding: 16px;
@@ -222,6 +453,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
+      flex-shrink: 0;
     }
 
     .sources-panel h3 {
@@ -250,7 +482,6 @@
       font-size: 11px;
       color: rgba(255,255,255,0.4);
       line-height: 1.5;
-      margin-bottom: 6px;
     }
 
     .sim-bar-wrap { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
@@ -269,52 +500,184 @@
 </head>
 <body>
 
-<header>
-  <h1>⚔️ DebateForge</h1>
-  <span>RAG-powered debate partner</span>
-</header>
-
-<div class="setup">
-  <input id="topicInput" type="text" placeholder="Enter debate topic..." value="Should AI replace teachers?" />
-  <div class="stance-group">
-    <button class="stance-btn active" onclick="setStance(this, 'pro')">Pro</button>
-    <button class="stance-btn" onclick="setStance(this, 'against')">Against</button>
-    <button class="stance-btn" onclick="setStance(this, 'neutral')">Neutral</button>
+<!-- SCREEN 1: LANDING -->
+<div class="screen active" id="s1">
+  <div class="logo-wrap">
+    <span class="logo-icon">⚔️</span>
+    <div class="logo-title">DebateForge</div>
+    <div class="logo-sub">RAG-powered debate partner</div>
+  </div>
+  <div class="mode-cards">
+    <div class="mode-card" onclick="selectMode('debate')">
+      <div class="mc-icon">⚔️</div>
+      <div class="mc-title">Debate Mode</div>
+      <div class="mc-desc">Go head to head with an AI opponent. No mercy, no hints.</div>
+    </div>
+    <div class="mode-card" onclick="selectMode('practice')">
+      <div class="mc-icon">🎓</div>
+      <div class="mc-title">Practice Mode</div>
+      <div class="mc-desc">Debate with coaching feedback after each argument. Build your skills.</div>
+    </div>
   </div>
 </div>
 
-<div class="main">
-  <div class="chat">
-    <div class="messages" id="messages">
-      <div class="empty-state" id="emptyState">
-        <div class="icon">🧠</div>
-        <div>Make your opening argument</div>
-      </div>
+<!-- SCREEN 2: TOPIC -->
+<div class="screen" id="s2">
+  <div style="position:absolute;top:24px;left:24px">
+    <button class="back-btn" onclick="goTo('s1')">← Back</button>
+  </div>
+  <div class="screen-title">Choose a topic</div>
+  <div class="screen-sub">Pick what you want to debate</div>
+  <div class="topic-grid">
+    <div class="topic-card" onclick="selectTopic('Should AI replace teachers?')">Should AI replace teachers?</div>
+    <div class="topic-card" onclick="selectTopic('Is remote work better than office work?')">Is remote work better than office work?</div>
+    <div class="topic-card" onclick="selectTopic('Should social media be banned for under 18s?')">Should social media be banned for under 18s?</div>
+    <div class="topic-card" onclick="selectTopic('Is universal basic income a good idea?')">Is universal basic income a good idea?</div>
+    <div class="topic-card" onclick="selectTopic('Should college education be free?')">Should college education be free?</div>
+    <div class="topic-card" onclick="selectTopic('Is nuclear energy the future?')">Is nuclear energy the future?</div>
+    <div class="topic-card" onclick="selectTopic('Should voting be mandatory?')">Should voting be mandatory?</div>
+    <div class="topic-card" onclick="selectTopic('Is capitalism the best economic system?')">Is capitalism the best economic system?</div>
+  </div>
+</div>
+
+<!-- SCREEN 3: STANCE -->
+<div class="screen" id="s3">
+  <div style="position:absolute;top:24px;left:24px">
+    <button class="back-btn" onclick="goTo('s2')">← Back</button>
+  </div>
+  <div class="screen-title">Pick your stance</div>
+  <div class="selected-topic-badge" id="stanceTopic"></div>
+  <div class="stance-cards">
+    <div class="stance-card pro" onclick="selectStance('pro')">
+      <div class="sc-icon">✅</div>
+      <div class="sc-title">For</div>
+      <div class="sc-desc">Argue in favour of the topic. AI will push back hard.</div>
     </div>
-    <div class="input-bar">
-      <input id="msgInput" type="text" placeholder="Type your argument..."
-        onkeydown="if(event.key==='Enter') sendMessage()" />
-      <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+    <div class="stance-card against" onclick="selectStance('against')">
+      <div class="sc-icon">❌</div>
+      <div class="sc-title">Against</div>
+      <div class="sc-desc">Argue against the topic. AI will defend it aggressively.</div>
+    </div>
+    <div class="stance-card switch" onclick="selectStance('switch')">
+      <div class="sc-icon">🎲</div>
+      <div class="sc-title">Keep me on my toes</div>
+      <div class="sc-desc">AI switches sides without warning. Stay sharp.</div>
     </div>
   </div>
+</div>
 
-  <div class="sources-panel">
-    <h3>Retrieved Evidence</h3>
-    <div id="sourcesList">
-      <div style="font-size:12px;color:rgba(255,255,255,0.2)">
-        Sources appear after your first argument.
+<!-- SCREEN 4: DEBATE -->
+<div class="screen" id="s4">
+  <div class="debate-header">
+    <div class="dh-logo">⚔️ DebateForge</div>
+    <div class="dh-topic">Topic: <span id="debateTopic"></span></div>
+    <div class="dh-badges">
+      <div class="dh-badge" id="stanceBadge"></div>
+      <div class="dh-badge mode-badge" id="modeBadge"></div>
+    </div>
+    <button class="new-debate-btn" onclick="newDebate()">New Debate</button>
+  </div>
+  <div class="debate-body">
+    <div class="chat">
+      <div class="messages" id="messages">
+        <div class="empty-state" id="emptyState">
+          <div class="icon">🧠</div>
+          <div>Make your opening argument</div>
+        </div>
+      </div>
+      <div class="input-bar">
+        <input id="msgInput" type="text" placeholder="Type your argument..."
+          onkeydown="if(event.key==='Enter') sendMessage()" />
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+    <div class="sources-panel">
+      <h3>Retrieved Evidence</h3>
+      <div id="sourcesList">
+        <div style="font-size:12px;color:rgba(255,255,255,0.2)">
+          Sources appear after your first argument.
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  let stance = 'pro';
+  let mode = '';
+  let currentTopic = '';
+  let stance = '';
+  let conversationHistory = [];
+  let turnCount = 0;
+  let currentAIStance = '';
+  let flipNext = false;
 
-  function setStance(btn, val) {
-    document.querySelectorAll('.stance-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    stance = val;
+  const TOPICS = {
+    "Should AI replace teachers?": "ai_education",
+    "Is remote work better than office work?": "remote_work",
+    "Should social media be banned for under 18s?": "social_media_age_ban",
+    "Is universal basic income a good idea?": "universal_basic_income",
+    "Should college education be free?": "free_college_education",
+    "Is nuclear energy the future?": "nuclear_energy",
+    "Should voting be mandatory?": "mandatory_voting",
+    "Is capitalism the best economic system?": "capitalism"
+  };
+
+  function goTo(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+  }
+
+  function selectMode(m) {
+    mode = m;
+    goTo('s2');
+  }
+
+  function selectTopic(topic) {
+    currentTopic = topic;
+    document.getElementById('stanceTopic').textContent = topic;
+    goTo('s3');
+  }
+
+  function selectStance(s) {
+    stance = s;
+    if (s === 'switch') {
+      currentAIStance = Math.random() > 0.5 ? 'pro' : 'against';
+    } else {
+      currentAIStance = s === 'pro' ? 'against' : 'pro';
+    }
+
+    document.getElementById('debateTopic').textContent = currentTopic;
+    document.getElementById('stanceBadge').textContent = s === 'pro' ? '✅ For' : s === 'against' ? '❌ Against' : '🎲 Switch mode';
+    document.getElementById('modeBadge').textContent = mode === 'practice' ? '🎓 Practice' : '⚔ Debate';
+
+    conversationHistory = [];
+    turnCount = 0;
+    document.getElementById('messages').innerHTML = `
+      <div class="empty-state" id="emptyState">
+        <div class="icon">🧠</div>
+        <div>Make your opening argument</div>
+      </div>
+    `;
+    document.getElementById('sourcesList').innerHTML = `
+      <div style="font-size:12px;color:rgba(255,255,255,0.2)">Sources appear after your first argument.</div>
+    `;
+
+    goTo('s4');
+    setTimeout(() => document.getElementById('msgInput').focus(), 100);
+  }
+
+  function newDebate() {
+    goTo('s1');
+  }
+
+  function maybeFlipStance() {
+    if (stance !== 'switch') return false;
+    const shouldFlip = Math.random() < 0.4;
+    if (shouldFlip) {
+      currentAIStance = currentAIStance === 'pro' ? 'against' : 'pro';
+      return true;
+    }
+    return false;
   }
 
   function removeEmpty() {
@@ -337,6 +700,15 @@
     messages.scrollTop = messages.scrollHeight;
   }
 
+  function addFlipAlert() {
+    const messages = document.getElementById('messages');
+    const alert = document.createElement('div');
+    alert.className = 'flip-alert';
+    alert.textContent = '🎲 The AI just switched sides...';
+    messages.appendChild(alert);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
   function addAIMessage(data) {
     const messages = document.getElementById('messages');
     const msg = document.createElement('div');
@@ -346,7 +718,7 @@
     if (data.fallacy && data.fallacy.fallacy) {
       fallacyHTML = `
         <div class="fallacy-badge">
-          ⚠️ ${data.fallacy.fallacy} — ${data.fallacy.explanation}
+          ⚠️ <strong>${data.fallacy.fallacy}</strong> — ${data.fallacy.explanation}
         </div>
       `;
     }
@@ -361,12 +733,37 @@
       </div>
     `;
 
+    let coachingHTML = '';
+    if (data.coaching) {
+      const c = data.coaching;
+      const wellItems = c.did_well.map(p => `<li>${p}</li>`).join('');
+      const weakItems = c.weaknesses.map(p => `<li>${p}</li>`).join('');
+      coachingHTML = `
+        <div class="coaching-card">
+          <div class="coach-title">🎓 Coach Feedback</div>
+          <div class="coaching-section well">
+            <div class="section-label">✅ What you did well</div>
+            <ul>${wellItems}</ul>
+          </div>
+          <div class="coaching-section weak">
+            <div class="section-label">❌ What weakened it</div>
+            <ul>${weakItems}</ul>
+          </div>
+          <div class="coaching-section sharper">
+            <div class="section-label">💡 Sharper version</div>
+            <div class="sharper-text">${c.sharper_version}</div>
+          </div>
+        </div>
+      `;
+    }
+
     msg.innerHTML = `
       <div class="avatar ai">⚔</div>
       <div class="bubble-wrap">
         ${fallacyHTML}
         ${scoresHTML}
         <div class="bubble ai">${data.response}</div>
+        ${coachingHTML}
       </div>
     `;
 
@@ -404,10 +801,10 @@
       card.className = 'source-card';
       card.innerHTML = `
         <div class="src-title">${s.source}</div>
-        <div class="src-text">${s.text.slice(0, 100)}...</div>
+        <div class="src-text">${s.text.slice(0, 120)}...</div>
         <div class="sim-bar-wrap">
           <span class="sim-label">${pct}%</span>
-          <div class="sim-bar"><div class="sim-fill" style="width:${pct}%"></div></div>
+          <div class="sim-bar"><div class="sim-fill" style="width:${Math.min(pct,100)}%"></div></div>
         </div>
       `;
       list.appendChild(card);
@@ -415,32 +812,47 @@
   }
 
   async function sendMessage() {
-    const topic = document.getElementById('topicInput').value.trim();
     const msg = document.getElementById('msgInput').value.trim();
-    if (!msg || !topic) return;
+    if (!msg) return;
 
     document.getElementById('msgInput').value = '';
     document.getElementById('sendBtn').disabled = true;
 
     addUserMessage(msg);
+
+    const flipped = maybeFlipStance();
+    if (flipped) addFlipAlert();
+
     showTyping();
+    conversationHistory.push({ role: 'user', content: msg });
+    turnCount++;
+
+    const apiStance = currentAIStance === 'pro' ? 'against' : 'pro';
 
     try {
       const res = await fetch('/debate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic, message: msg, stance })
+        body: JSON.stringify({
+          topic: currentTopic,
+          message: msg,
+          stance: apiStance,
+          history: conversationHistory,
+          mode
+        })
       });
       const data = await res.json();
       removeTyping();
       addAIMessage(data);
       updateSources(data.sources);
+      conversationHistory.push({ role: 'assistant', content: data.response });
     } catch (err) {
       removeTyping();
       addAIMessage({
         response: 'Something went wrong. Try again.',
         fallacy: null,
-        scores: { logic: 0, evidence: 0, clarity: 0, persuasiveness: 0 }
+        scores: { logic: 0, evidence: 0, clarity: 0, persuasiveness: 0 },
+        coaching: null
       });
     }
 

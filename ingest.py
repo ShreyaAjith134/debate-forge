@@ -2,13 +2,21 @@ import os
 import re
 import chromadb
 from sentence_transformers import SentenceTransformer
-from dotenv import load_dotenv
-
-load_dotenv()
 
 CORPUS_DIR = "corpus"
 CHUNK_SIZE = 60
 CHUNK_OVERLAP = 15
+
+TOPIC_MAP = {
+    "Should AI replace teachers?": "ai_education",
+    "Is remote work better than office work?": "remote_work",
+    "Should social media be banned for under 18s?": "social_media_age_ban",
+    "Is universal basic income a good idea?": "universal_basic_income",
+    "Should college education be free?": "free_college_education",
+    "Is nuclear energy the future?": "nuclear_energy",
+    "Should voting be mandatory?": "mandatory_voting",
+    "Is capitalism the best economic system?": "capitalism"
+}
 
 def load_corpus():
     docs = []
@@ -45,12 +53,12 @@ def ingest():
 
     print("Setting up ChromaDB...")
     client = chromadb.PersistentClient(path="./chroma_db")
-    
+
     try:
         client.delete_collection("debate_corpus")
     except:
         pass
-    
+
     collection = client.create_collection("debate_corpus")
 
     all_chunks = []
